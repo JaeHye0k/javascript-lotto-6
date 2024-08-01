@@ -21,6 +21,7 @@ class App {
 		this.bonusNumbers = (await inputGenerator.next()).value;
 		this.issueLottos(+this.cost);
 		// outputGenerator.next();
+		// outputGenerator.next();
 	}
 
 	async *input() {
@@ -30,7 +31,9 @@ class App {
 	}
 
 	// *output() {
-	// 	yield Console.print(`${this.issuedLottos.length}개를 구매했습니다. `);
+	// 	yield Console.print(`${this.issuedLottos.length}개를 구매했습니다.`);
+	// 	const lottos = this.issuedLottos.map((e) => "[" + e.getNumbers() + "]").join("\n");
+	// 	yield Console.print(lottos);
 	// }
 
 	issueLottos(cost) {
@@ -46,7 +49,7 @@ class App {
 			this.endNum,
 			this.numCount
 		);
-		randomNums.sort();
+		randomNums.sort((a, b) => a - b);
 		return new Lotto(randomNums);
 	}
 }
