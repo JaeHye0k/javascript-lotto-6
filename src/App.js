@@ -15,11 +15,11 @@ class App {
 
 	async play() {
 		const inputGenerator = this.input();
-		// const outputGenerator = this.output();
+		const outputGenerator = this.output();
 		this.cost = (await inputGenerator.next()).value; // 구입 금액 입력
 		this.issuedLottos = this.issueLottos(+this.cost); // 로또 발행
-		// outputGenerator.next(); // 발행된 로또 개수 출력
-		// outputGenerator.next(); // 발행된 로또 번호 출력
+		outputGenerator.next(); // 발행된 로또 개수 출력
+		outputGenerator.next(); // 발행된 로또 번호 출력
 
 		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number); // 당첨 번호 입력
 		this.bonusNumbers = (await inputGenerator.next()).value; // 보너스 번호 입력
@@ -31,11 +31,11 @@ class App {
 		yield await Console.readLineAsync("보너스 번호를 입력해 주세요.\n");
 	}
 
-	// *output() {
-	// 	yield Console.print(`${this.issuedLottos.length}개를 구매했습니다.`);
-	// 	const lottos = this.issuedLottos.map((e) => "[" + e.getNumbers() + "]").join("\n");
-	// 	yield Console.print(lottos);
-	// }
+	*output() {
+		yield Console.print(`${this.issuedLottos.length}개를 구매했습니다.`);
+		const lottos = this.issuedLottos.map((e) => "[" + e.getNumbers() + "]").join("\n");
+		yield Console.print(lottos);
+	}
 
 	// 구입 금액만큼 로또 발행
 	issueLottos(cost) {
