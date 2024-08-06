@@ -1,16 +1,18 @@
 import { Console, Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
 
-class App {
-	startNum = 1;
-	endNum = 45;
-	numCount = 6;
+const START_NUM = 1,
+	END_NUM = 45,
+	NUM_COUNT = 6,
+	MAX_RANK = 5;
 
+class App {
 	constructor() {
 		this.issuedLottos = [];
 		this.cost = 0;
 		this.winningNumbers;
 		this.bonusNumbers;
+		this.ranks = [];
 	}
 
 	async play() {
@@ -22,7 +24,9 @@ class App {
 		outputGenerator.next(); // 발행된 로또 번호 출력
 
 		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number); // 당첨 번호 입력
-		this.bonusNumbers = (await inputGenerator.next()).value; // 보너스 번호 입력
+		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number); // 보너스 번호 입력
+		this.ranks = this.compareNumbers();
+		console.table(this.ranks);
 	}
 
 	async *input() {
@@ -54,14 +58,22 @@ class App {
 
 	// 로또 한 개 발행
 	getLotto() {
-		const randomNums = Random.pickUniqueNumbersInRange(
-			this.startNum,
-			this.endNum,
-			this.numCount
-		);
+		const randomNums = Random.pickUniqueNumbersInRange(START_NUM, END_NUM, NUM_COUNT);
 		// 로또 번호 오름차순 정렬
 		randomNums.sort((a, b) => a - b);
 		return new Lotto(randomNums);
+	}
+
+	// 발행된 번호와 당첨번호(+보너스 번호) 비교
+	compareNumbers() {
+		const ranks = Array.from({ length: MAX_RANK + 1 }, () => []);
+		for (const lotto of this.issuedLottos) {
+			const rank = Lotto.compareNumbers(lotto, this.winningNumbers, this.bonusNumbers);
+			// ranks[i] = i등 Lotto, i==0 => 꽝
+			ranks[rank].push(lotto);
+		}
+		return ranks;
+		// console.table(this.ranks);
 	}
 }
 
