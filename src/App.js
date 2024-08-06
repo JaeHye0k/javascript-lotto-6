@@ -16,12 +16,13 @@ class App {
 	async play() {
 		const inputGenerator = this.input();
 		// const outputGenerator = this.output();
-		this.cost = (await inputGenerator.next()).value;
-		this.winningNumbers = (await inputGenerator.next()).value;
-		this.bonusNumbers = (await inputGenerator.next()).value;
-		this.issueLottos(+this.cost);
-		// outputGenerator.next();
-		// outputGenerator.next();
+		this.cost = (await inputGenerator.next()).value; // 구입 금액 입력
+		this.issuedLottos = this.issueLottos(+this.cost); // 로또 발행
+		// outputGenerator.next(); // 발행된 로또 개수 출력
+		// outputGenerator.next(); // 발행된 로또 번호 출력
+
+		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number); // 당첨 번호 입력
+		this.bonusNumbers = (await inputGenerator.next()).value; // 보너스 번호 입력
 	}
 
 	async *input() {
@@ -36,19 +37,29 @@ class App {
 	// 	yield Console.print(lottos);
 	// }
 
+	// 구입 금액만큼 로또 발행
 	issueLottos(cost) {
-		const count = cost / 1000;
+		const count = this.costToCount(cost);
+		const issuedLottos = [];
 		for (let i = 0; i < count; i++) {
-			this.issuedLottos.push(this.getLotto());
+			issuedLottos.push(this.getLotto());
 		}
+		return issuedLottos;
 	}
 
+	// 구입 금액를 로또 개수로 변환
+	costToCount(cost) {
+		return cost / 1000;
+	}
+
+	// 로또 한 개 발행
 	getLotto() {
 		const randomNums = Random.pickUniqueNumbersInRange(
 			this.startNum,
 			this.endNum,
 			this.numCount
 		);
+		// 로또 번호 오름차순 정렬
 		randomNums.sort((a, b) => a - b);
 		return new Lotto(randomNums);
 	}
