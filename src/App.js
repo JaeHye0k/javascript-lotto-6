@@ -1,6 +1,7 @@
 import { Console, Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
 import { getWinningResults } from "./utills/winning-result.js";
+import { getTotalIncomeRate } from "./utills/income.js";
 
 const START_NUM = 1,
 	END_NUM = 45,
@@ -28,6 +29,7 @@ class App {
 		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number); // 보너스 번호 입력
 		this.ranks = this.compareNumbers(); // 로또 번호와 당첨 번호 비교
 		outputGenerator.next(); // 당첨 결과 출력
+		outputGenerator.next(); // 총 수익률 출력
 	}
 
 	async *input() {
@@ -42,6 +44,8 @@ class App {
 		yield Console.print(lottos);
 		const winningResult = getWinningResults(this.ranks);
 		yield Console.print(winningResult);
+		const totalIncomeRate = getTotalIncomeRate(this.ranks, this.cost);
+		yield Console.print(`총 수익률은 ${totalIncomeRate}%입니다.`);
 	}
 
 	// 구입 금액만큼 로또 발행
@@ -77,12 +81,6 @@ class App {
 		}
 		return ranks;
 	}
-
-	// setTotalWinningPrize(){
-	// 	for(let i=0; i<this.ranks.length; i++){
-	// 		this.totalWinningPrize += PRIZE[i] * this.ranks[i].length;
-	// 	}
-	// }
 }
 
 export default App;
