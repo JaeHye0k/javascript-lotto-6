@@ -1,5 +1,6 @@
 import { Console, Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
+import { getWinningResults } from "./utills/winning-result.js";
 
 const START_NUM = 1,
 	END_NUM = 45,
@@ -25,8 +26,8 @@ class App {
 
 		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number); // 당첨 번호 입력
 		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number); // 보너스 번호 입력
-		this.ranks = this.compareNumbers();
-		console.table(this.ranks);
+		this.ranks = this.compareNumbers(); // 로또 번호와 당첨 번호 비교
+		outputGenerator.next(); // 당첨 결과 출력
 	}
 
 	async *input() {
@@ -39,6 +40,8 @@ class App {
 		yield Console.print(`${this.issuedLottos.length}개를 구매했습니다.`);
 		const lottos = this.issuedLottos.map((e) => "[" + e.getNumbers() + "]").join("\n");
 		yield Console.print(lottos);
+		const winningResult = getWinningResults(this.ranks);
+		yield Console.print(winningResult);
 	}
 
 	// 구입 금액만큼 로또 발행
@@ -73,8 +76,13 @@ class App {
 			ranks[rank].push(lotto);
 		}
 		return ranks;
-		// console.table(this.ranks);
 	}
+
+	// setTotalWinningPrize(){
+	// 	for(let i=0; i<this.ranks.length; i++){
+	// 		this.totalWinningPrize += PRIZE[i] * this.ranks[i].length;
+	// 	}
+	// }
 }
 
 export default App;
