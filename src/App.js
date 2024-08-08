@@ -1,7 +1,8 @@
 import { Console, Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
-import { getWinningResults } from "./utills/winning-result.js";
 import { getTotalIncomeRate } from "./utills/income.js";
+import { MESSAGES } from "./utills/messages.js";
+import { format } from "./utills/format.js";
 
 const START_NUM = 1,
 	END_NUM = 45,
@@ -15,37 +16,45 @@ class App {
 		this.winningNumbers;
 		this.bonusNumbers;
 		this.ranks = [];
+		this.incomeRate;
 	}
 
 	async play() {
 		const inputGenerator = this.input();
 		const outputGenerator = this.output();
-		this.cost = (await inputGenerator.next()).value; // 구입 금액 입력
-		this.issuedLottos = this.issueLottos(+this.cost); // 로또 발행
-		outputGenerator.next(); // 발행된 로또 개수 출력
-		outputGenerator.next(); // 발행된 로또 번호 출력
 
-		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number); // 당첨 번호 입력
-		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number); // 보너스 번호 입력
-		this.ranks = this.compareNumbers(); // 로또 번호와 당첨 번호 비교
+		this.cost = (await inputGenerator.next()).value;
+		this.issuedLottos = this.issueLottos(+this.cost);
+
+		outputGenerator.next(); // 구입한 로또 개수 출력
+		outputGenerator.next(); // 구입한 로또 번호 출력
+
+		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number);
+		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number);
+		this.ranks = this.compareNumbers();
+
 		outputGenerator.next(); // 당첨 결과 출력
+
+		this.incomeRate = getTotalIncomeRate(this.ranks, this.cost);
+
 		outputGenerator.next(); // 총 수익률 출력
 	}
 
 	async *input() {
-		yield await Console.readLineAsync("구입금액을 입력해 주세요.\n");
-		yield await Console.readLineAsync("당첨 번호를 입력해 주세요.\n");
-		yield await Console.readLineAsync("보너스 번호를 입력해 주세요.\n");
+		yield await Console.readLineAsync(MESSAGES.INPUT.COST); // 구입 비용 입력
+		yield await Console.readLineAsync(MESSAGES.INPUT.WINNING_NUM); // 당첨 번호 입력
+		yield await Console.readLineAsync(MESSAGES.INPUT.BONUS_NUM); // 보너스 번호 입력
 	}
 
 	*output() {
-		yield Console.print(`${this.issuedLottos.length}개를 구매했습니다.`);
-		const lottos = this.issuedLottos.map((e) => "[" + e.getNumbers() + "]").join("\n");
-		yield Console.print(lottos);
-		const winningResult = getWinningResults(this.ranks);
-		yield Console.print(winningResult);
-		const totalIncomeRate = getTotalIncomeRate(this.ranks, this.cost);
-		yield Console.print(`총 수익률은 ${totalIncomeRate}%입니다.`);
+		const purchaseCount = format.purchaseCount(this.issuedLottos.length);
+		yield Console.print(purchaseCount); // 구입한 로또 개수 출력
+		const lottos = format.issuedLottos(this.issuedLottos);
+		yield Console.print(lottos); // 구입한 로또 번호 출력
+		const winningResult = format.winningResults(this.ranks);
+		yield Console.print(winningResult); // 당첨 내역 출력
+		const incomeRate = format.incomeRate(this.incomeRate);
+		yield Console.print(incomeRate); // 수익률 출력
 	}
 
 	// 구입 금액만큼 로또 발행
