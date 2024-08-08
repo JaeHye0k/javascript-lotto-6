@@ -1,6 +1,9 @@
 import { Console } from "@woowacourse/mission-utils";
 import { MESSAGES } from "../constant/messages.js";
 import { format } from "./format.js";
+import { validator } from "./validator.js";
+
+let numbers;
 
 export const input = {
 	/**
@@ -10,6 +13,7 @@ export const input = {
 	cost: async () => {
 		const cost = await Console.readLineAsync(MESSAGES.INPUT.COST); // 구입 비용 입력
 		const formattedCost = format.input.cost(cost);
+		validator.checkCost(formattedCost);
 		return formattedCost;
 	},
 	/**
@@ -19,6 +23,8 @@ export const input = {
 	winningNumber: async () => {
 		const winningNumber = await Console.readLineAsync(MESSAGES.INPUT.WINNING_NUM); // 당첨 번호 입력
 		const formattedWinningNumber = format.input.winningNumber(winningNumber);
+		validator.checkWinningNumber(formattedWinningNumber);
+		numbers = [...formattedWinningNumber];
 		return formattedWinningNumber;
 	},
 	/**
@@ -28,6 +34,9 @@ export const input = {
 	bonusNumber: async () => {
 		const bonusNumber = await Console.readLineAsync(MESSAGES.INPUT.BONUS_NUM); // 보너스 번호 입력
 		const formattedBonusNumber = format.input.bonusNumber(bonusNumber);
+		validator.checkBonusNumber(formattedBonusNumber);
+		numbers = [...numbers, formattedBonusNumber];
+		validator.checkDuplication(numbers);
 		return formattedBonusNumber;
 	},
 };
@@ -51,7 +60,7 @@ export const output = {
 	},
 	/**
 	 * 당첨 내역 출력
-	 * @type {(ranks: Array[][]) => undefined}
+	 * @type {(ranks: Lotto[][]) => undefined}
 	 */
 	winningResult: (ranks) => {
 		const winningResult = format.output.winningResults(ranks);
