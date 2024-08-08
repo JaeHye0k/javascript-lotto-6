@@ -10,32 +10,30 @@ const START_NUM = 1,
 	MAX_RANK = 5;
 
 class App {
-	constructor() {
-		this.issuedLottos = [];
-		this.cost = 0;
-		this.winningNumbers;
-		this.bonusNumbers;
-		this.ranks = [];
-		this.incomeRate;
-	}
+	#issuedLottos;
+	#cost;
+	#winningNumbers;
+	#bonusNumbers;
+	#ranks;
+	#incomeRate;
 
 	async play() {
 		const inputGenerator = this.input();
 		const outputGenerator = this.output();
 
-		this.cost = (await inputGenerator.next()).value;
-		this.issuedLottos = this.issueLottos(+this.cost);
+		this.#cost = (await inputGenerator.next()).value;
+		this.#issuedLottos = this.issueLottos(+this.#cost);
 
 		outputGenerator.next(); // 구입한 로또 개수 출력
 		outputGenerator.next(); // 구입한 로또 번호 출력
 
-		this.winningNumbers = (await inputGenerator.next()).value.split(",").map(Number);
-		this.bonusNumbers = [(await inputGenerator.next()).value].map(Number);
-		this.ranks = this.compareNumbers();
+		this.#winningNumbers = (await inputGenerator.next()).value.split(",").map(Number);
+		this.#bonusNumbers = [(await inputGenerator.next()).value].map(Number);
+		this.#ranks = this.compareNumbers();
 
 		outputGenerator.next(); // 당첨 결과 출력
 
-		this.incomeRate = getTotalIncomeRate(this.ranks, this.cost);
+		this.#incomeRate = getTotalIncomeRate(this.#ranks, this.#cost);
 
 		outputGenerator.next(); // 총 수익률 출력
 	}
@@ -47,13 +45,13 @@ class App {
 	}
 
 	*output() {
-		const purchaseCount = format.purchaseCount(this.issuedLottos.length);
+		const purchaseCount = format.purchaseCount(this.#issuedLottos.length);
 		yield Console.print(purchaseCount); // 구입한 로또 개수 출력
-		const lottos = format.issuedLottos(this.issuedLottos);
+		const lottos = format.issuedLottos(this.#issuedLottos);
 		yield Console.print(lottos); // 구입한 로또 번호 출력
-		const winningResult = format.winningResults(this.ranks);
+		const winningResult = format.winningResults(this.#ranks);
 		yield Console.print(winningResult); // 당첨 내역 출력
-		const incomeRate = format.incomeRate(this.incomeRate);
+		const incomeRate = format.incomeRate(this.#incomeRate);
 		yield Console.print(incomeRate); // 수익률 출력
 	}
 
@@ -83,8 +81,8 @@ class App {
 	// 발행된 번호와 당첨번호(+보너스 번호) 비교
 	compareNumbers() {
 		const ranks = Array.from({ length: MAX_RANK + 1 }, () => []);
-		for (const lotto of this.issuedLottos) {
-			const rank = Lotto.compareNumbers(lotto, this.winningNumbers, this.bonusNumbers);
+		for (const lotto of this.#issuedLottos) {
+			const rank = Lotto.compareNumbers(lotto, this.#winningNumbers, this.#bonusNumbers);
 			// ranks[i] = i등 Lotto, i==0 => 꽝
 			ranks[rank].push(lotto);
 		}
