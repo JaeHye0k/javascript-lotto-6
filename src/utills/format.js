@@ -1,6 +1,6 @@
 import { commaPerThree } from "./regex.js";
 import { rankMoney, rankMatchCount } from "../constant/rank.js";
-import { MESSAGES } from "./messages.js";
+import { MESSAGES } from "../constant/messages.js";
 
 /**
  * 구입한 로또 번호를 출력 형식에 맞게 변환한다.
@@ -71,4 +71,34 @@ function incomeRate(incomeRate) {
 	return `총 수익률은 ${incomeRate}%입니다.`;
 }
 
-export const format = { issuedLottos, purchaseCount, winningResults, incomeRate };
+/**
+ * 입력받은 구입 금액을 처리 형식에 맞게 변환한다.
+ * @param {String} cost
+ * @returns {Number}
+ */
+function cost(cost) {
+	return +cost;
+}
+
+/**
+ * 입력받은 당첨 번호를 처리 형식에 맞게 변환한다.
+ * @param {String} numbers
+ * @returns {Number[]}
+ */
+function winningNumber(numbers) {
+	return numbers.split(",").map(Number);
+}
+
+/**
+ * 입력받은 보너스 번호를 처리 형식에 맞게 변환한다.
+ * @param {String} number
+ * @returns {Number[]}
+ */
+function bonusNumber(number) {
+	return [+number];
+}
+
+export const format = {
+	input: { cost, winningNumber, bonusNumber },
+	output: { issuedLottos, purchaseCount, winningResults, incomeRate },
+};
