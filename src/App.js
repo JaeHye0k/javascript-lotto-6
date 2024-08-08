@@ -17,14 +17,14 @@ class App {
 	#incomeRate;
 
 	async play() {
-		this.#cost = await input.cost();
+		this.#cost = await input.cost(); // 구입 금액 입력
 		this.#issuedLottos = this.issueLottos(this.#cost);
 
 		output.purchaseCount(this.#issuedLottos); // 구입한 로또 개수 출력
 		output.lotto(this.#issuedLottos); // 구입한 로또 번호 출력
 
-		this.#winningNumber = await input.winningNumber();
-		this.#bonusNumber = await input.bonusNumber();
+		this.#winningNumber = await input.winningNumber(); // 당첨 번호 입력
+		this.#bonusNumber = await input.bonusNumber(); // 보너스 번호 입력
 		this.#ranks = this.compareNumbers();
 
 		output.winningResult(this.#ranks); // 당첨 결과 출력
