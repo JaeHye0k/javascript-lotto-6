@@ -1,6 +1,6 @@
 import { commaPerThree } from "./regex.js";
 import { rankMoney, rankMatchCount } from "../constant/rank.js";
-import { MESSAGES } from "./Messages.js";
+import { MESSAGES } from "./messages.js";
 
 /**
  * 구입한 로또 번호를 출력 형식에 맞게 변환한다.
