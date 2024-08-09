@@ -4,34 +4,34 @@ import { MESSAGES } from "../constant/messages.js";
 
 const input = {
 	/** @type {(cost:String)=>Number} 입력받은 구입 금액을 처리 형식에 맞게 변환한다. */
-	cost: (cost) => {
+	cost(cost) {
 		return +cost;
 	},
 
 	/**  @type {(numbers:String)=>Number[]} 입력받은 당첨 번호를 처리 형식에 맞게 변환한다. */
-	winningNumber: (numbers) => {
+	winningNumber(numbers) {
 		return numbers.split(",").map(Number);
 	},
 
 	/** @type {(number:String)=>Number[]} 입력받은 보너스 번호를 처리 형식에 맞게 변환한다. */
-	bonusNumber: (number) => {
+	bonusNumber(number) {
 		return [+number];
 	},
 };
 
 const output = {
 	/** @type {(lottos:Lotto[])=>String} 구입한 로또들을 출력 형식에 맞게 변환한다.*/
-	issuedLottos: (lottos) => {
+	issuedLottos(lottos) {
 		return lottos.map((lotto) => lottoNumToString(lotto.getNumbers())).join("\n");
 	},
 
 	/** @type {(count:Number)=>String} 구입한 로또의 개수를 출력 형식에 맞게 변환한다. */
-	purchaseCount: (count) => {
+	purchaseCount(count) {
 		return `\n${count}개를 구매했습니다.`;
 	},
 
 	/** @type {(ranks:Lotto[][])=>String} 당첨내역 전체를 출력 형식에 맞게 변환한다 */
-	winningResults: (ranks) => {
+	winningResults(ranks) {
 		let result = MESSAGES.OUTPUT.WINNING_RESULT;
 		for (let i = ranks.length - 1; i >= 1; i--) {
 			result += getWinningResult(i, ranks[i].length) + "\n";
@@ -40,7 +40,7 @@ const output = {
 	},
 
 	/** @type {(incomeRate:Number)=>String} 총 수익률을 출력 형식에 맞게 변환한다. */
-	incomeRate: (incomeRate) => {
+	incomeRate(incomeRate) {
 		return `총 수익률은 ${incomeRate}%입니다.`;
 	},
 };
