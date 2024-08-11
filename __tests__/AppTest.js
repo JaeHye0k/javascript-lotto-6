@@ -1,20 +1,6 @@
 import App from "../src/App.js";
 import Lotto from "../src/Lotto.js";
 
-const app = new App();
-
-function mockIssueLottos(cost, randomNums) {
-	app.issueLottos = jest.fn(() => {
-		const count = cost / 1000;
-		const issuedLottos = [];
-		for (let i = 0; i < count; i++) {
-			randomNums[i].sort((a, b) => a - b);
-			issuedLottos.push(new Lotto(randomNums[i]));
-		}
-		if (count === issuedLottos.length) return issuedLottos;
-	});
-}
-
 // TODO: App 단위 테스트 구현하기
 // [x] costToCount
 // [x] getLotto
@@ -22,6 +8,8 @@ function mockIssueLottos(cost, randomNums) {
 // [x] compareNumbers
 
 describe("앱 단위 테스트", () => {
+	const app = new App();
+
 	test("costToCount() 는 구입할 로또 개수를 반환해야 합니다.", () => {
 		// given
 		const COST = 1000;
@@ -49,15 +37,19 @@ describe("앱 단위 테스트", () => {
 	test("issueLottos() 는 발행된 로또 객체를 담은 1차원 배열을 반환해야 합니다.", () => {
 		// given
 		const COST = 3000;
+		const COUNT = COST / 1000;
 		const RANDOM_NUMS = [
 			[6, 5, 4, 3, 2, 1],
 			[10, 9, 8, 7, 6, 5],
 			[43, 42, 41, 40, 39, 38],
 		];
+		const ISSUED_LOTTOS = [];
 
 		// when
-		mockIssueLottos(COST, RANDOM_NUMS);
-		const issuedLottos = app.issueLottos();
+		for (let i = 0; i < COUNT; i++) {
+			RANDOM_NUMS[i].sort((a, b) => a - b);
+			ISSUED_LOTTOS.push(new Lotto(RANDOM_NUMS[i]));
+		}
 
 		// then
 		const RESULT = [
@@ -66,7 +58,8 @@ describe("앱 단위 테스트", () => {
 			new Lotto([38, 39, 40, 41, 42, 43]),
 		];
 
-		expect(issuedLottos).toEqual(RESULT);
+		expect(ISSUED_LOTTOS).toEqual(RESULT);
+		expect(ISSUED_LOTTOS.length).toBe(COUNT);
 	});
 
 	test("compareNumbers() 는 Lotto 객체를 담은 2차원 배열을 반환해야 합니다.", () => {
