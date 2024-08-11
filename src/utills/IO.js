@@ -23,7 +23,7 @@ const input = {
 	async winningNumber() {
 		const winningNumber = await Console.readLineAsync(MESSAGES.INPUT.WINNING_NUM); // 당첨 번호 입력
 		const formattedWinningNumber = format.input.winningNumber(winningNumber);
-		validator.checkWinningNumber(formattedWinningNumber);
+		validator.checkLottoNumber(formattedWinningNumber);
 		numbers = [...formattedWinningNumber];
 		return formattedWinningNumber;
 	},
@@ -88,7 +88,7 @@ async function repeat(input) {
 			result = await input();
 			success = true;
 		} catch (err) {
-			console.error(err);
+			Console.print(err.message);
 		}
 	}
 	return result;
