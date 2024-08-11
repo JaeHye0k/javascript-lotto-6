@@ -7,7 +7,7 @@ function checkCost(cost) {
 }
 
 /** @type {(winningNumber: Number[])=>undefined} 당첨 번호에 대한 유효성 검사를 수행한다.*/
-function checkWinningNumber(winningNumber) {
+function checkLottoNumber(winningNumber) {
 	if (winningNumber.length !== 6) throw new Error(MESSAGES.ERROR.NOT_SIX_DIGIT);
 	if (new Set(winningNumber).size !== 6) throw new Error(MESSAGES.ERROR.DUPLICATION);
 	for (const num of winningNumber) {
@@ -27,4 +27,5 @@ function checkBonusNumber(bonusNumber) {
 function checkDuplication(numbers) {
 	if (new Set(numbers).size !== 7) throw new Error(MESSAGES.ERROR.DUPLICATION);
 }
-export const validator = { checkCost, checkBonusNumber, checkWinningNumber, checkDuplication };
+
+export const validator = { checkCost, checkBonusNumber, checkLottoNumber, checkDuplication };
