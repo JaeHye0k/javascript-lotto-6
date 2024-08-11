@@ -8,6 +8,14 @@ const START_NUM = 1,
 	NUM_COUNT = 6,
 	MAX_RANK = 5;
 
+/**
+ * @property {Lotto[]} issuedLottos 발행된 로또 배열
+ * @property {Number} cost 구입금액
+ * @property {Number[]} winningNumber 당첨 번호
+ * @property {Number[]} bonusNumber 보너스 번호
+ * @property {Lotto[][]} ranks 등수 별 로또 배열
+ * @property {Number} incomeRate 수익률
+ */
 class App {
 	#issuedLottos;
 	#cost;
@@ -34,7 +42,7 @@ class App {
 		output.incomeRate(this.#incomeRate); // 총 수익률 출력
 	}
 
-	// 구입 금액만큼 로또 발행
+	/** @type {(cost:Number)=>Lotto[]} 구입 금액만큼 로또 발행 */
 	issueLottos(cost) {
 		const count = this.costToCount(cost);
 		const issuedLottos = [];
@@ -44,12 +52,12 @@ class App {
 		return issuedLottos;
 	}
 
-	// 구입 금액를 로또 개수로 변환
+	/** @type {(cost:Number)=>Number} 구입 금액를 로또 개수로 변환*/
 	costToCount(cost) {
 		return cost / 1000;
 	}
 
-	// 로또 한 개 발행
+	/** @type {()=>Lotto} 로또 한 개 발행 */
 	getLotto() {
 		const randomNums = Random.pickUniqueNumbersInRange(START_NUM, END_NUM, NUM_COUNT);
 		// 로또 번호 오름차순 정렬
@@ -57,7 +65,7 @@ class App {
 		return new Lotto(randomNums);
 	}
 
-	// 발행된 번호와 당첨번호(+보너스 번호) 비교
+	/** @type {()=> Lotto[][]} 발행된 번호와 당첨번호(+보너스 번호) 비교한 뒤 2차원 등수 배열 반환 */
 	compareNumbers() {
 		const ranks = Array.from({ length: MAX_RANK + 1 }, () => []);
 		for (const lotto of this.#issuedLottos) {
