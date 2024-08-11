@@ -12,7 +12,7 @@ export const MESSAGES = {
 		NOT_DIVIDED: "[ERROR] 로또 구입 금액이 1,000원으로 나누어 떨어지지 않습니다.",
 		NAN: "[ERROR] 숫자가 아닌 문자가 포함되어 있습니다.",
 		OUT_OF_RANGE: "[ERROR] 로또 번호는 1부터 45 사이의 숫자여야 합니다.",
-		NOT_SIX_DIGIT: "[ERROR] 당첨 번호는 6자리이어야 합니다.",
-		NOT_ONE_DIGIT: "[ERROR] 보너스 번호는 1자리이어야 합니다.",
+		NOT_SIX_DIGIT: "[ERROR] 로또 번호는 6개여야 합니다.",
+		NOT_ONE_DIGIT: "[ERROR] 보너스 번호는 1개여야 합니다.",
 	},
 };
