@@ -1,7 +1,7 @@
 import { Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
 import { getTotalIncomeRate } from "./utills/income.js";
-import { proxiedInput, output } from "./utills/IO.js";
+import { proxiedInput, output } from "./utills/io.js";
 
 const START_NUM = 1,
 	END_NUM = 45,
