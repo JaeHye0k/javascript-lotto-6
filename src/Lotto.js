@@ -29,10 +29,10 @@ class Lotto {
 	 * @param {Number[]} bonusNumbers
 	 * @returns {Number}
 	 */
-	static compareNumbers(lotto, winningNumbers, bonusNumbers) {
-		const numbers = lotto.getNumbers();
-		const winningCount = Lotto.getSameNumberCount(numbers, winningNumbers);
-		const bonusCount = Lotto.getSameNumberCount(numbers, bonusNumbers);
+	static getWhatRankOfLotto(lotto, winningNumbers, bonusNumbers) {
+		const lottoNumber = lotto.getNumbers();
+		const winningCount = Lotto.getMatchCount(lottoNumber, winningNumbers);
+		const bonusCount = Lotto.getMatchCount(lottoNumber, bonusNumbers);
 		const rank = Lotto.getRank(winningCount, bonusCount);
 		return rank;
 	}
@@ -43,12 +43,12 @@ class Lotto {
 	 * @param {Number[]} compared
 	 * @returns {Number}
 	 */
-	static getSameNumberCount(base, compared) {
-		let includeCount = 0;
-		for (let i = 0; i < compared.length; i++) {
-			if (base.includes(compared[i])) includeCount++;
+	static getMatchCount(base, compare) {
+		let matchCount = 0;
+		for (let i = 0; i < compare.length; i++) {
+			if (base.includes(compare[i])) matchCount++;
 		}
-		return includeCount;
+		return matchCount;
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Lotto {
 		if (winningCount === 3) return 5; // 5등
 		if (winningCount === 4) return 4; // 4등
 		if (winningCount === 5) {
-			if (!bonusCount) return 3; // 3등
+			if (bonusCount === 0) return 3; // 3등
 			return 2; // 2등
 		}
 		if (winningCount === 6) return 1; // 1등

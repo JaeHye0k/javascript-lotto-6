@@ -18,26 +18,26 @@ const START_NUM = 1,
  */
 class App {
 	#issuedLottos;
-	#cost;
+	#purchaseCost;
 	#winningNumber;
 	#bonusNumber;
-	#ranks;
+	#issuedLottoRank;
 	#incomeRate;
 
 	async play() {
-		this.#cost = await proxiedInput.cost(); // 구입 금액 입력
-		this.#issuedLottos = this.issueLottos(this.#cost);
+		this.#purchaseCost = await proxiedInput.cost(); // 구입 금액 입력
+		this.#issuedLottos = this.issueLottos(this.#purchaseCost);
 
 		output.purchaseCount(this.#issuedLottos); // 구입한 로또 개수 출력
 		output.lotto(this.#issuedLottos); // 구입한 로또 번호 출력
 
 		this.#winningNumber = await proxiedInput.winningNumber(); // 당첨 번호 입력
 		this.#bonusNumber = await proxiedInput.bonusNumber(); // 보너스 번호 입력
-		this.#ranks = this.compareNumbers();
+		this.#issuedLottoRank = this.getLottoRank();
 
-		output.winningResult(this.#ranks); // 당첨 결과 출력
+		output.winningResult(this.#issuedLottoRank); // 당첨 결과 출력
 
-		this.#incomeRate = getTotalIncomeRate(this.#ranks, this.#cost);
+		this.#incomeRate = getTotalIncomeRate(this.#issuedLottoRank, this.#purchaseCost);
 
 		output.incomeRate(this.#incomeRate); // 총 수익률 출력
 	}
@@ -66,10 +66,10 @@ class App {
 	}
 
 	/** @type {()=> Lotto[][]} 발행된 번호와 당첨번호(+보너스 번호) 비교한 뒤 2차원 등수 배열 반환 */
-	compareNumbers() {
+	getLottoRank() {
 		const ranks = Array.from({ length: MAX_RANK + 1 }, () => []);
 		for (const lotto of this.#issuedLottos) {
-			const rank = Lotto.compareNumbers(lotto, this.#winningNumber, this.#bonusNumber);
+			const rank = Lotto.getWhatRankOfLotto(lotto, this.#winningNumber, this.#bonusNumber);
 			// ranks[i] = i등 Lotto, i==0 => 꽝
 			ranks[rank].push(lotto);
 		}

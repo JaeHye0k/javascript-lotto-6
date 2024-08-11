@@ -64,9 +64,9 @@ describe("앱 단위 테스트", () => {
 
 	test("compareNumbers() 는 Lotto 객체를 담은 2차원 배열을 반환해야 합니다.", () => {
 		// given
-		const compareNumbersSpy = jest.spyOn(Lotto, "compareNumbers");
+		const getWhatRankOfLottoSpy = jest.spyOn(Lotto, "getWhatRankOfLotto");
 		const MAX_RANK = 5;
-		const RANKS = Array.from({ length: MAX_RANK + 1 }, () => []);
+		const ISSUED_LOTTO_RANK = Array.from({ length: MAX_RANK + 1 }, () => []);
 		const ISSUED_LOTTOS = [
 			new Lotto([1, 2, 3, 4, 5, 6]),
 			new Lotto([2, 3, 4, 5, 6, 7]),
@@ -80,8 +80,8 @@ describe("앱 단위 테스트", () => {
 
 		// when
 		for (const LOTTO of ISSUED_LOTTOS) {
-			const RANK = Lotto.compareNumbers(LOTTO, WINNING_NUMBER, BONUS_NUMBER);
-			RANKS[RANK].push(LOTTO);
+			const RANK = Lotto.getWhatRankOfLotto(LOTTO, WINNING_NUMBER, BONUS_NUMBER);
+			ISSUED_LOTTO_RANK[RANK].push(LOTTO);
 		}
 
 		// then
@@ -93,7 +93,7 @@ describe("앱 단위 테스트", () => {
 			[new Lotto([3, 4, 5, 6, 7, 8])], // 3등 (4개 일치)
 			[new Lotto([4, 5, 6, 7, 8, 9])], // 4등 (3개 일치)
 		];
-		expect(RANKS).toEqual(RESULT);
-		expect(compareNumbersSpy).toHaveBeenCalledTimes(ISSUED_LOTTOS.length);
+		expect(ISSUED_LOTTO_RANK).toEqual(RESULT);
+		expect(getWhatRankOfLottoSpy).toHaveBeenCalledTimes(ISSUED_LOTTOS.length);
 	});
 });
