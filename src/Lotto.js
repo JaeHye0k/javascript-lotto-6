@@ -17,7 +17,10 @@ class Lotto {
 	 * @param {Number[]} numbers
 	 */
 	#validate(numbers) {
-		validator.checkLottoNumber(numbers);
+		validator.isNotSixDigit(numbers);
+		validator.isIncludeDuplicationNumber(numbers, numbers.length);
+		validator.isIncludeNaN(numbers);
+		validator.isIncludeOutOfRangeNumber(numbers);
 	}
 
 	// TODO: 추가 기능 구현

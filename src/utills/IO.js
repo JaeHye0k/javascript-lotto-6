@@ -13,7 +13,8 @@ const input = {
 	async cost() {
 		const cost = await Console.readLineAsync(MESSAGES.INPUT.COST); // 구입 비용 입력
 		const formattedCost = format.input.cost(cost);
-		validator.checkCost(formattedCost);
+		validator.isNaNCost(formattedCost);
+		validator.isNotDivieded(formattedCost);
 		return formattedCost;
 	},
 	/**
@@ -23,7 +24,10 @@ const input = {
 	async winningNumber() {
 		const winningNumber = await Console.readLineAsync(MESSAGES.INPUT.WINNING_NUM); // 당첨 번호 입력
 		const formattedWinningNumber = format.input.winningNumber(winningNumber);
-		validator.checkLottoNumber(formattedWinningNumber);
+		validator.isNotSixDigit(formattedWinningNumber);
+		validator.isIncludeDuplicationNumber(formattedWinningNumber, formattedWinningNumber.length);
+		validator.isIncludeNaN(formattedWinningNumber);
+		validator.isIncludeOutOfRangeNumber(formattedWinningNumber);
 		numbers = [...formattedWinningNumber];
 		return formattedWinningNumber;
 	},
@@ -34,9 +38,12 @@ const input = {
 	async bonusNumber() {
 		const bonusNumber = await Console.readLineAsync(MESSAGES.INPUT.BONUS_NUM); // 보너스 번호 입력
 		const formattedBonusNumber = format.input.bonusNumber(bonusNumber);
-		validator.checkBonusNumber(formattedBonusNumber);
+		validator.isNotOneDigit(formattedBonusNumber);
+		validator.isIncludeNaN(formattedBonusNumber);
+		validator.isIncludeOutOfRangeNumber(formattedBonusNumber);
 		numbers = [...numbers, ...formattedBonusNumber];
-		validator.checkDuplication(numbers);
+		validator.isIncludeDuplicationNumber(numbers, numbers.length);
+
 		return formattedBonusNumber;
 	},
 };
