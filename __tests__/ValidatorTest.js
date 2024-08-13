@@ -14,122 +14,63 @@ describe("예외처리 테스트", () => {
 	beforeEach(() => {
 		jest.restoreAllMocks();
 	});
-	test("isNotSixDigit() 테스트", () => {
-		// given
-		const isNotSixDigitSpy = jest.spyOn(validator, "isNotSixDigit");
-		const WRONG_SIZE_NUMBER = [[], [1], [1, 2, 3, 4, 5, 6, 7]];
-		const COUNT = WRONG_SIZE_NUMBER.length;
 
-		// when & then
-		for (const numbers of WRONG_SIZE_NUMBER) {
-			expect(() => validator.isNotSixDigit(numbers)).toThrow(MESSAGES.ERROR.NOT_SIX_DIGIT);
-		}
+	const testCases = [
+		{
+			name: "isNotSixDigit",
+			inputs: [[], [1], [1, 2, 3, 4, 5, 6, 7]],
+			expectedError: MESSAGES.ERROR.NOT_SIX_DIGIT,
+		},
+		{
+			name: "isNotOneDigit",
+			inputs: [[], [1, 2]],
+			expectedError: MESSAGES.ERROR.NOT_ONE_DIGIT,
+		},
+		{
+			name: "isIncludeDuplicationNumber",
+			inputs: [{ args: [[1, 1, 2, 3, 4, 5], 6] }, { args: [[1, 2, 3, 4, 5, 6, 6], 7] }],
+			expectedError: MESSAGES.ERROR.DUPLICATION,
+		},
+		{
+			name: "isIncludeNaN",
+			inputs: [
+				["1", 2, 3, 4, 5, 6],
+				[1, 2, 3, "four", 5, 6],
+				[1, 2, 3, undefined, 5, 6],
+			],
+			expectedError: MESSAGES.ERROR.NAN,
+		},
+		{
+			name: "isIncludeOutOfRangeNumber",
+			inputs: [
+				[0, 1, 2, 3, 4, 5],
+				[1, 2, 3, 4, 5, 46],
+			],
+			expectedError: MESSAGES.ERROR.OUT_OF_RANGE,
+		},
+		{
+			name: "isNotDivieded",
+			inputs: [1001, 0, 1100],
+			expectedError: MESSAGES.ERROR.NOT_DIVIDED,
+		},
+		{
+			name: "isNaNCost",
+			inputs: ["1000j", undefined, "One Hundred"],
+			expectedError: MESSAGES.ERROR.NAN,
+		},
+	];
 
-		expect(isNotSixDigitSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.NOT_SIX_DIGIT).toMatch(/[Error]/);
-	});
-
-	test("isNotOneDigit() 테스트", () => {
-		// given
-		const isNotOneDigitSpy = jest.spyOn(validator, "isNotOneDigit");
-		const WRONG_SIZE_NUMBER = [[], [1, 2]];
-		const COUNT = WRONG_SIZE_NUMBER.length;
-
-		// when & then
-		for (const numbers of WRONG_SIZE_NUMBER) {
-			expect(() => validator.isNotOneDigit(numbers)).toThrow(MESSAGES.ERROR.NOT_ONE_DIGIT);
-		}
-
-		expect(isNotOneDigitSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.NOT_ONE_DIGIT).toMatch(/[Error]/);
-	});
-
-	test("isIncludeDuplicationNumber() 테스트", () => {
-		// given
-		const isIncludeDuplicationNumberSpy = jest.spyOn(validator, "isIncludeDuplicationNumber");
-		const DUPLICATION_NUMBER = [
-			[1, 1, 2, 3, 4, 5],
-			[1, 2, 3, 4, 5, 6, 6],
-		];
-		const COUNT = DUPLICATION_NUMBER.length;
-
-		// when & then
-		for (const numbers of DUPLICATION_NUMBER) {
-			expect(() => validator.isIncludeDuplicationNumber(numbers, numbers.length)).toThrow(
-				MESSAGES.ERROR.DUPLICATION
-			);
-		}
-
-		expect(isIncludeDuplicationNumberSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.DUPLICATION).toMatch(/[Error]/);
-	});
-
-	test("isIncludeNaN() 테스트", () => {
-		// given
-		const isIncludeNaNSpy = jest.spyOn(validator, "isIncludeNaN");
-		const NOT_NUMBERS = [
-			["1", 2, 3, 4, 5, 6],
-			[1, 2, 3, "four", 5, 6],
-			[1, 2, 3, undefined, 5, 6],
-		];
-		const COUNT = NOT_NUMBERS.length;
-
-		// when & then
-		for (const numbers of NOT_NUMBERS) {
-			expect(() => validator.isIncludeNaN(numbers)).toThrow(MESSAGES.ERROR.NAN);
-		}
-
-		expect(isIncludeNaNSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.NAN).toMatch(/[Error]/);
-	});
-
-	test("isIncludeOutOfRangeNumber() 테스트", () => {
-		// given
-		const isIncludeOutOfRangeNumberSpy = jest.spyOn(validator, "isIncludeOutOfRangeNumber");
-		const OUT_OF_RANGE = [
-			[0, 1, 2, 3, 4, 5],
-			[1, 2, 3, 4, 5, 46],
-		];
-		const COUNT = OUT_OF_RANGE.length;
-
-		// when & then
-		for (const numbers of OUT_OF_RANGE) {
-			expect(() => validator.isIncludeOutOfRangeNumber(numbers)).toThrow(
-				MESSAGES.ERROR.OUT_OF_RANGE
-			);
-		}
-
-		expect(isIncludeOutOfRangeNumberSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.OUT_OF_RANGE).toMatch(/[Error]/);
-	});
-
-	test("isNotDivieded() 테스트", () => {
-		// given
-		const isNotDiviededSpy = jest.spyOn(validator, "isNotDivieded");
-		const NOT_DIVIDED = [1001, 0, 1100];
-		const COUNT = NOT_DIVIDED.length;
-
-		// when & then
-		for (const cost of NOT_DIVIDED) {
-			expect(() => validator.isNotDivieded(cost)).toThrow(MESSAGES.ERROR.NOT_DIVIDED);
-		}
-
-		expect(isNotDiviededSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.NOT_DIVIDED).toMatch(/[Error]/);
-	});
-
-	test("isNaNCost() 테스트", () => {
-		// given
-		const isNaNCostSpy = jest.spyOn(validator, "isNaNCost");
-		const NAN_COST = ["1000j", undefined, "One Hundred"];
-		const COUNT = NAN_COST.length;
-
-		// when & then
-		for (const cost of NAN_COST) {
-			expect(() => validator.isNaNCost(cost)).toThrow(MESSAGES.ERROR.NAN);
-		}
-
-		expect(isNaNCostSpy).toHaveBeenCalledTimes(COUNT);
-		expect(MESSAGES.ERROR.NAN).toMatch(/[Error]/);
+	testCases.forEach(({ name, inputs, expectedError }) => {
+		test(`${name}() 테스트`, () => {
+			const spy = jest.spyOn(validator, name);
+			inputs.forEach((input) => {
+				if (Array.isArray(input?.args)) {
+					expect(() => validator[name](...input.args)).toThrow(expectedError);
+				} else {
+					expect(() => validator[name](input)).toThrow(expectedError);
+				}
+			});
+			expect(spy).toHaveBeenCalledTimes(inputs.length);
+		});
 	});
 });
