@@ -14,7 +14,7 @@ const START_NUM = 1,
  * @property {Number[]} winningNumber 당첨 번호
  * @property {Number[]} bonusNumber 보너스 번호
  * @property {Lotto[][]} ranks 등수 별 로또 배열
- * @property {Number} incomeRate 수익률
+ * @property {String} incomeRate 수익률
  */
 class App {
 	#issuedLottos;

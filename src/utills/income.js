@@ -39,8 +39,8 @@ function getIncome(rank, count) {
  * 수익률을 반환한다.
  * @param {Number} cost 비용
  * @param {Number} income 수익
- * @returns {Number} 수익률
+ * @returns {String} 수익률
  */
 function getIncomeRate(cost, income) {
-	return +((income / cost) * 100).toFixed(1);
+	return ((income / cost) * 100).toFixed(1);
 }

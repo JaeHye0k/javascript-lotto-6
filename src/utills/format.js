@@ -39,7 +39,7 @@ const output = {
 		return result.trimEnd();
 	},
 
-	/** @type {(incomeRate:Number)=>String} 총 수익률을 출력 형식에 맞게 변환한다. */
+	/** @type {(incomeRate:String)=>String} 총 수익률을 출력 형식에 맞게 변환한다. */
 	incomeRate(incomeRate) {
 		return `총 수익률은 ${incomeRate}%입니다.`;
 	},
